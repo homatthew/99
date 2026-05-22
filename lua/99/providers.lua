@@ -228,6 +228,36 @@ function ClaudeCodeProvider.fetch_models(callback)
   }, nil)
 end
 
+--- @class CodexProvider : _99.Providers.BaseProvider
+local CodexProvider = setmetatable({}, { __index = BaseProvider })
+
+--- @param query string
+--- @param context _99.Prompt
+--- @return string[]
+function CodexProvider._build_command(_, query, context)
+  return {
+    "codex",
+    "exec",
+    "--model",
+    context.model,
+    "-c",
+    'model_reasoning_effort="high"',
+    "--ephemeral",
+    "--dangerously-bypass-approvals-and-sandbox",
+    query,
+  }
+end
+
+--- @return string
+function CodexProvider._get_provider_name()
+  return "CodexProvider"
+end
+
+--- @return string
+function CodexProvider._get_default_model()
+  return "gpt-5.5"
+end
+
 --- @class CursorAgentProvider : _99.Providers.BaseProvider
 local CursorAgentProvider = setmetatable({}, { __index = BaseProvider })
 
@@ -333,6 +363,7 @@ return {
   BaseProvider = BaseProvider,
   OpenCodeProvider = OpenCodeProvider,
   ClaudeCodeProvider = ClaudeCodeProvider,
+  CodexProvider = CodexProvider,
   CursorAgentProvider = CursorAgentProvider,
   KiroProvider = KiroProvider,
   GeminiCLIProvider = GeminiCLIProvider,

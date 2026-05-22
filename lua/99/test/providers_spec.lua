@@ -47,6 +47,29 @@ describe("providers", function()
     end)
   end)
 
+  describe("CodexProvider", function()
+    it("builds correct command with model", function()
+      local request = { model = "gpt-5.5" }
+      local cmd =
+        Providers.CodexProvider._build_command(nil, "test query", request)
+      eq({
+        "codex",
+        "exec",
+        "--model",
+        "gpt-5.5",
+        "-c",
+        'model_reasoning_effort="high"',
+        "--ephemeral",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "test query",
+      }, cmd)
+    end)
+
+    it("has correct default model", function()
+      eq("gpt-5.5", Providers.CodexProvider._get_default_model())
+    end)
+  end)
+
   describe("CursorAgentProvider", function()
     it("builds correct command with model", function()
       local request = { model = "anthropic/claude-sonnet-4-5" }
@@ -119,6 +142,17 @@ describe("providers", function()
     )
 
     it(
+      "uses CodexProvider default model when provider specified but no model",
+      function()
+        local _99 = require("99")
+
+        _99.setup({ provider = Providers.CodexProvider })
+        local state = _99.__get_state()
+        eq("gpt-5.5", state.model)
+      end
+    )
+
+    it(
       "uses CursorAgentProvider default model when provider specified but no model",
       function()
         local _99 = require("99")
@@ -174,6 +208,7 @@ describe("providers", function()
     it("all providers have make_request", function()
       eq("function", type(Providers.OpenCodeProvider.make_request))
       eq("function", type(Providers.ClaudeCodeProvider.make_request))
+      eq("function", type(Providers.CodexProvider.make_request))
       eq("function", type(Providers.CursorAgentProvider.make_request))
       eq("function", type(Providers.GeminiCLIProvider.make_request))
     end)
