@@ -235,13 +235,14 @@ local CodexProvider = setmetatable({}, { __index = BaseProvider })
 --- @param context _99.Prompt
 --- @return string[]
 function CodexProvider._build_command(_, query, context)
+  local effort = context._99 and context._99.provider_reasoning_effort or "high"
   return {
     "codex",
     "exec",
     "--model",
     context.model,
     "-c",
-    'model_reasoning_effort="high"',
+    string.format('model_reasoning_effort="%s"', effort),
     "--ephemeral",
     "--dangerously-bypass-approvals-and-sandbox",
     query,

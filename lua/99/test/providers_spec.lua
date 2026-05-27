@@ -65,6 +65,16 @@ describe("providers", function()
       }, cmd)
     end)
 
+    it("uses configured reasoning effort", function()
+      local request = {
+        model = "gpt-5.5",
+        _99 = { provider_reasoning_effort = "minimal" },
+      }
+      local cmd =
+        Providers.CodexProvider._build_command(nil, "test query", request)
+      eq('model_reasoning_effort="minimal"', cmd[6])
+    end)
+
     it("has correct default model", function()
       eq("gpt-5.5", Providers.CodexProvider._get_default_model())
     end)
@@ -201,6 +211,13 @@ describe("providers", function()
       _99.setup({})
       local state = _99.__get_state()
       eq({}, state.provider_extra_args)
+    end)
+
+    it("stores provider_reasoning_effort on state", function()
+      local _99 = require("99")
+      _99.setup({ provider_reasoning_effort = "minimal" })
+      local state = _99.__get_state()
+      eq("minimal", state.provider_reasoning_effort)
     end)
   end)
 

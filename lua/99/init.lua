@@ -55,6 +55,7 @@ end
 --- @field md_files? string[]
 --- @field provider? _99.Providers.BaseProvider
 --- @field provider_extra_args? string[]
+--- @field provider_reasoning_effort? string
 --- @field display_errors? boolean
 --- @field auto_add_skills? boolean
 --- @field completion? _99.Completion
@@ -443,6 +444,12 @@ function _99.setup(opts)
     assert(
       type(opts.provider_extra_args) == "table",
       "opts.provider_extra_args must be a table"
+    )
+  end
+  if opts.provider_reasoning_effort then
+    assert(
+      type(opts.provider_reasoning_effort) == "string",
+      "opts.provider_reasoning_effort must be a string"
     )
   end
 

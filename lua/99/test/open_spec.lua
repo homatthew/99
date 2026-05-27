@@ -27,8 +27,11 @@ local function qfix_items()
   local items = vim.fn.getqflist()
   local out = {}
   for _, item in ipairs(items) do
+    local filename = vim.api.nvim_buf_get_name(item.bufnr)
+    -- macOS resolves /tmp through /private/tmp when quickfix opens a buffer.
+    filename = filename:gsub("^/private/tmp/", "/tmp/")
     table.insert(out, {
-      filename = vim.api.nvim_buf_get_name(item.bufnr),
+      filename = filename,
       col = item.col,
       lnum = item.lnum,
       text = item.text,

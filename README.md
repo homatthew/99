@@ -230,6 +230,7 @@ No description.
 | `in_flight_options` | `_99.InFlight.Opts \| nil` | - |
 | `md_files` | `string[] \| nil` | - |
 | `provider` | `_99.Providers.BaseProvider \| nil` | - |
+| `provider_reasoning_effort` | `string \| nil` | - |
 | `display_errors` | `boolean \| nil` | - |
 | `auto_add_skills` | `boolean \| nil` | - |
 | `completion` | `_99.Completion \| nil` | - |
